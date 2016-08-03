@@ -107,6 +107,15 @@ module Snippet
       SnippetServer.render_snippet(opts)
     end
 
+    def self.letter_volume(opts={})
+      base = snippet_server_url
+      base += "#{opts[:project]}" if opts[:project].present?
+      Rails.logger.debug "render volume base #{base} #{opts.inspect}"
+      uri = SnippetServer.contruct_url(base, "volume.xq", opts)
+      Rails.logger.debug("snippet url #{uri}")
+      self.get(uri) 
+    end
+
     def self.doc_has_text(opts={})
       text = self.render_snippet(id).to_str
       has_text(text)
@@ -159,7 +168,8 @@ module Snippet
       else
         a =id.split("-")
       end
-      {doc: "#{a[0]}.xml", id: a[1]}
+      document = a[0].end_with?(".xml") ? a[0] : "#{a[0]}.xml"
+      {doc: document , id: a[1]}
     end
 
     #get collection from a solr id
