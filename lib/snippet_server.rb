@@ -14,6 +14,10 @@ module Snippet
 
     def self.get_snippet_script
       "#{Rails.application.config_for(:snippet)["get_snippet_script"]}"
+      end
+
+    def self.get_openSeadragon_script
+      "#{Rails.application.config_for(:snippet)["openSeadragon_script"]}"
     end
 
     def self.get(uri)
@@ -81,6 +85,22 @@ module Snippet
       self.get(uri)
     end
 
+    def self.facsimile(opts={})
+      opts[:op] = 'facsimile'
+      opts[:prefix] = Rails.application.config_for(:snippet)["image_server_prefix"]
+      SnippetServer.render_snippet(opts)
+    end
+
+    def self.openSeadragon_snippet(opts={})
+      opts[:op] = 'json'
+      opts[:prefix] = Rails.application.config_for(:snippet)["image_server_prefix"]
+      opts[:c] = 'letter_books'
+      base = snippet_server_url
+      base += "#{opts[:project]}" if opts[:project].present?
+      uri = SnippetServer.contruct_url(base, get_openSeadragon_script, opts)
+      self.get(uri)
+    end
+
     def self.solrize(opts={})
       opts[:op] = 'solrize'
       opts[:status] = 'created' unless opts[:status].present?
@@ -91,6 +111,7 @@ module Snippet
       text = self.render_snippet(id).to_str
       has_text(text)
     end
+
 
     def self.has_text(text)
       text = ActionController::Base.helpers.strip_tags(text).delete("\n")
@@ -118,18 +139,12 @@ module Snippet
 
     def self.preprocess_tei(xml_source)
       xslt = Nokogiri.XSLT(
-          File.join(Rails.root, 'app/export/transforms/preprocess.xsl'))
+      File.join(Rails.root, 'app/export/transforms/preprocess.xsl'))
       doc = Nokogiri::XML.parse(xml_source) { |config| config.strict }
       rdoc = xslt.transform(doc)
       rdoc
     end
 
-
-    def self.facsimile(opts={})
-      opts[:op] = 'facsimile'
-      opts[:prefix] = Rails.application.config_for(:snippet)["image_server_prefix"]
-      SnippetServer.render_snippet(opts)
-    end
 
     def self.update_letter(json, opts={})
       uri = SnippetServer.contruct_url(snippet_server_url_with_admin, "save.xq", opts)
