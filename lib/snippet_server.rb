@@ -169,6 +169,7 @@ module Snippet
       uri += "/"+script
       uri += "?doc=#{opts[:doc]}" if opts[:doc].present?
       uri += "&id=#{URI.escape(opts[:id])}" if opts[:id].present?
+      uri += "&mode=#{URI.escape(opts[:mode])}" if opts[:mode].present?
       uri += "&op=#{URI.escape(opts[:op])}" if opts[:op].present?
       uri += "&c=#{URI.escape(opts[:c])}" if opts[:c].present?
       uri += "&prefix=#{URI.escape(opts[:prefix])}" if opts[:prefix].present?
