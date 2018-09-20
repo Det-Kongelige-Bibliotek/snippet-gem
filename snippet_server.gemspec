@@ -6,11 +6,11 @@ require 'snippet_server/version'
 Gem::Specification.new do |spec|
   spec.name          = "snippet_server"
   spec.version       = SnippetServer::VERSION
-  spec.authors       = ["Polyxeni Makri"]
-  spec.email         = ["poma@kb.dk"]
+  spec.authors       = ["Sigfrid Lundberg","Polyxeni Makri"]
+  spec.email         = ["slu@kb.dk",""]
 
   spec.summary       = %q{A gem for facilitating the communication with the snippet server, intended to be used in Valhal, ADL and Danmarks Breve.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/Det-Kongelige-Bibliotek/snippet-gem/blob/master/README.md"
   spec.license       = "MIT"
 
   spec.files         = ["lib/snippet_server.rb"]
